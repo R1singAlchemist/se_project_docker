@@ -1,0 +1,61 @@
+import { test, expect } from '@playwright/test';
+
+//Date Range April 01, 2025 - April 30, 2025
+//This test is valid until April 30, 2025, because the program displays information based on the date, causing some data to be inconsistent with the test.
+
+test('test', async ({ page }) => {
+  test.setTimeout(90000);
+  await page.goto('http://localhost:3000/');
+  await page.getByRole('link', { name: 'Sign In' }).click();
+  await page.getByRole('textbox', { name: 'Email' }).click();
+  await page.getByRole('textbox', { name: 'Email' }).fill('user3@gmail.com');
+  await page.getByRole('textbox', { name: 'Password' }).click();
+  await page.getByRole('textbox', { name: 'Password' }).fill('12345678');
+  await page.getByRole('button', { name: 'Sign In' }).click();
+  await expect(page.getByRole('link', { name: 'Booking History' })).toBeVisible();
+  await page.getByRole('link', { name: 'Booking History' }).click();
+  await page.getByRole('button', { name: 'Review Dentist' }).first().click();
+  await page.locator('label').filter({ hasText: '3 Stars' }).click();
+  await page.getByRole('button', { name: 'Submit Review' }).click();
+  await expect(page.getByText('Please add your review comment')).toBeVisible();
+  await page.getByRole('button').filter({ hasText: /^$/ }).click();
+  await page.getByRole('button', { name: 'Review Dentist' }).first().click();
+  await page.locator('label').filter({ hasText: '4 Stars' }).click();
+  await page.locator('label').filter({ hasText: '5 Stars' }).click();
+  await page.getByRole('textbox', { name: 'Your Review' }).dblclick();
+  await page.getByRole('textbox', { name: 'Your Review' }).fill('TestPlaywrightTC1_2');
+  await page.getByRole('button', { name: 'Submit Review' }).click();
+  await expect(page.getByText('Thank you! Your review has')).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Dentists' })).toBeVisible();
+  await page.getByRole('link', { name: 'Dentists' }).click();
+  await page.locator('div:nth-child(8) > .p-6 > .inline-block').click();
+  await expect(page.getByText('Anonymous★★★★★TestPlaywrightTC1_2')).toBeVisible();
+  await page.getByRole('link', { name: 'Booking History' }).dblclick();
+  await expect(page.getByText('Schedule your Dental BookingFilter AppointmentsSearchStatusAll')).toBeVisible();
+  await page.getByRole('link', { name: 'Dentists' }).click();
+  await expect(page.getByText('Starting price: 35000 ฿')).toBeVisible();
+  await expect(page.getByText('Starting price: 50000 ฿')).toBeVisible();
+  await expect(page.getByText('Starting price: 25000 ฿')).toBeVisible();
+  await page.locator('.inline-block').first().click();
+  await expect(page.locator('div').filter({ hasText: 'Dr. John CarterArea of' }).nth(1)).toBeVisible();
+  await page.locator('a').filter({ hasText: /^Dentists$/ }).click();
+  await expect(page.getByRole('button', { name: 'Compare' })).toBeVisible();
+  await page.getByRole('button', { name: 'Compare' }).click();
+  await expect(page.getByRole('button', { name: 'Cancel Compare' })).toBeVisible();
+  await page.locator('.flex > .w-5').first().check();
+  await page.locator('div:nth-child(2) > .p-6 > .flex > .w-5').check();
+  await expect(page.getByText('You can select a maximum of 2')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Compare Selected Dentists' })).toBeVisible();
+  await page.getByRole('button', { name: 'Compare Selected Dentists' }).dblclick();
+  await expect(page.getByText('Dr. John CarterArea of')).toBeVisible();
+  await expect(page.getByText('Dr. Emily RichardsonArea of')).toBeVisible();
+  await expect(page.getByText('Your smile, your choiceCompare and find the dentist who suits you bestBack to')).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Bookings' })).toBeVisible();
+  await page.getByRole('link', { name: 'Bookings' }).click();
+  await page.getByLabel('', { exact: true }).click();
+  await page.getByRole('option', { name: 'Dr. John Carter' }).click();
+  await expect(page.getByText('Selected DentistDr. John CarterScheduleApril 2025April')).toBeVisible();
+  await page.getByRole('gridcell', { name: '30' }).click();
+  await expect(page.getByText('Selected DentistDr. John CarterScheduleApril 2025April')).toBeVisible();
+  await page.getByRole('heading', { name: 'Available Time Slots' }).click();
+});
